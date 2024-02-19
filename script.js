@@ -10,8 +10,14 @@ const gameBoard = (() => {
   }
 
   let currentMarker = '';
+  let winningComboFound = false;
 
   const placeMarker = (cellNumber) => {
+    if (winningComboFound) {
+      console.log('Game is already over.');
+      return;
+    }
+
     if (cellNumber < 0 || cellNumber > 8) {
       console.log('Error - input number from 0 - 8');
       return;
@@ -39,14 +45,16 @@ const gameBoard = (() => {
   };
 
   const checkForWin = () => {
+    if (winningComboFound) {
+      return
+    }
     winningCombos.forEach((combo) => {
       const [a, b, c] = combo;
-
       const marker = board[Math.floor(a / 3)][a % 3];
 
-      if (marker && marker === board[Math.floor(b / 3)][b % 3] && marker === board[Math.floor(c / 3)][c % 3]) {
+      if (marker && marker === board[Math.floor(b / 3)][b % 3] && marker === board[Math.floor(c / 3)][c % 3]){
+        console.log(`${marker} wins!`)
         winningComboFound = true;
-        console.log(`${currentMarker} wins!`)
       }
     });
   };
