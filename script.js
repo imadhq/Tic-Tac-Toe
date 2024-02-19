@@ -11,9 +11,10 @@ const gameBoard = (() => {
 
   let currentMarker = '';
   let winningComboFound = false;
+  let movesCount = 0;
 
   const placeMarker = (cellNumber) => {
-    if (winningComboFound) {
+    if (winningComboFound || movesCount === 9) {
       console.log('Game is already over.');
       return;
     }
@@ -29,14 +30,16 @@ const gameBoard = (() => {
     if (board[row][col] === '') {
       if (currentMarker === '' || currentMarker === 'o') {
         board[row][col] = 'x';
-        currentMarker = 'x'
+        currentMarker = 'x';
+        movesCount++;
         displayBoard();
-        checkForWin();
+        checkForWinOrTie();
       } else if (currentMarker === 'x') {
         board[row][col] = 'o';
-        currentMarker = 'o'
+        currentMarker = 'o';
+        movesCount++;
         displayBoard();
-        checkForWin();
+        checkForWinOrTie();
       }
     } 
     else {
@@ -44,7 +47,7 @@ const gameBoard = (() => {
     }
   };
 
-  const checkForWin = () => {
+  const checkForWinOrTie = () => {
     if (winningComboFound) {
       return
     }
@@ -57,6 +60,10 @@ const gameBoard = (() => {
         winningComboFound = true;
       }
     });
+
+    if (!winningComboFound && movesCount === 9) {
+      console.log(`It's a tie!`)
+    }
   };
 
   displayBoard();
@@ -64,7 +71,7 @@ const gameBoard = (() => {
   return {
     displayBoard,
     placeMarker,
-    checkForWin
+    checkForWinOrTie
   };
 
 })();
