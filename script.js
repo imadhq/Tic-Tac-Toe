@@ -1,7 +1,7 @@
 const gameBoard = (() => {
   const board = [
-    ['', '', ''],
-    ['', '', ''],
+    ['X', '', ''],
+    ['', 'O', ''],
     ['', '', '']
   ];
 
@@ -68,10 +68,25 @@ const gameBoard = (() => {
 
   displayBoard();
 
+  const renderBoard = () => {
+    const boardContainer = document.createElement('div');
+    boardContainer.classList.add('board-container');
+    document.body.appendChild(boardContainer);
+
+    board.forEach((row) => {
+      row.forEach((cell, index) => {
+        const cellDiv = document.createElement('div');
+        cellDiv.classList.add('created-cell');
+        cellDiv.innerText = cell
+        boardContainer.appendChild(cellDiv)
+      });
+    });
+  };
+
+  renderBoard();
+
   return {
-    displayBoard,
     placeMarker,
-    checkForWinOrTie
   };
 
 })();
