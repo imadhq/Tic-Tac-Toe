@@ -1,6 +1,10 @@
 const gameBoard = (() => {
 
-  const board = ['','','','','','','','',''];
+  let board = ['','','','','','','','',''];
+
+  let currentMarker = 'x';
+  let winningComboFound = false;
+  let movesCount = 0;
 
   const winningCombos = [
     [0,1,2],
@@ -13,10 +17,6 @@ const gameBoard = (() => {
     [2,4,6],
   ];  
 
-  let currentMarker = '';
-  let winningComboFound = false;
-  let movesCount = 0;
-
   const placeMarker = (cellNumber) => {
     if (winningComboFound || movesCount === 9) {
       renderTextBox.changeText('Game is already over.');
@@ -24,22 +24,22 @@ const gameBoard = (() => {
     };
 
     if (board[cellNumber] === '') {
-      if (currentMarker === '' || currentMarker === 'o') {
+      if (currentMarker === 'x') {
         renderTextBox.changeText(`Player 2's turn`);
         board[cellNumber] = 'x';
-        currentMarker = 'x';
-        movesCount++;
-        renderContainer.renderBoard();
-        checkForWinOrTie();
-      } else if (currentMarker === 'x') {
-        renderTextBox.changeText(`Player 1's turn`);
-        board[cellNumber] = 'o';
         currentMarker = 'o';
         movesCount++;
         renderContainer.renderBoard();
         checkForWinOrTie();
+      } else if (currentMarker === 'o') {
+        renderTextBox.changeText(`Player 1's turn`);
+        board[cellNumber] = 'o';
+        currentMarker = 'x';
+        movesCount++;
+        renderContainer.renderBoard();
+        checkForWinOrTie();
       };
-    }
+    };
   };
 
   const checkForWinOrTie = () => {
@@ -100,6 +100,29 @@ const gameBoard = (() => {
       changeText
     };
   })();
+
+  const renderResetButton = (() => {
+    const button = document.createElement('button');
+    button.innerText = 'Reset';
+    button.classList.add('reset-button');
+    document.body.appendChild(button);
+
+    const resetBoard = () => {
+      button.addEventListener('click', () => {
+        board = ['','','','','','','','',''];
+        currentMarker = 'x';
+        winningComboFound = false;
+        movesCount = 0;
+        renderTextBox.changeText(`Player 1's turn`);
+        renderContainer.renderBoard();
+      });
+    };
+
+    return {
+      resetBoard
+    };
+  })();
+  renderResetButton.resetBoard();
 
 })();
 
