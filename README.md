@@ -2,7 +2,7 @@
 This game is part of my learning journey with 'The Odin Project' curriculum.
 
 **Project Overview**
-The aim of this project is to develop a Tic Tac Toe game using HTML, CSS, and JavaScript. The main focus is on implementing game logic efficiently by organizing code into arrays, objects, and functions.
+- The aim of this project is to develop a Tic Tac Toe game using HTML, CSS, and JavaScript. The main focus is on implementing game logic efficiently by organizing code into arrays, objects, and functions.
 
 **Key Objectives**
 - Minimize global code by utilizing factory functions.
