@@ -1,13 +1,17 @@
 const gameBoard = (() => {
-  const board = [
-    ['X', '', ''],
-    ['', 'O', ''],
-    ['', '', '']
-  ];
 
-  const displayBoard = () => {
-    console.log(board);
-  }
+  const board = ['','','','','','','','',''];
+
+  const winningCombos = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6],
+  ];  
 
   let currentMarker = '';
   let winningComboFound = false;
@@ -15,91 +19,88 @@ const gameBoard = (() => {
 
   const placeMarker = (cellNumber) => {
     if (winningComboFound || movesCount === 9) {
-      console.log('Game is already over.');
+      renderTextBox.changeText('Game is already over.');
       return;
-    }
+    };
 
-    if (cellNumber < 0 || cellNumber > 8) {
-      console.log('Error - input number from 0 - 8');
-      return;
-    } 
-
-    const row = Math.floor(cellNumber / 3);
-    const col = cellNumber % 3;
-    
-    if (board[row][col] === '') {
+    if (board[cellNumber] === '') {
       if (currentMarker === '' || currentMarker === 'o') {
-        board[row][col] = 'x';
+        renderTextBox.changeText(`Player 2's turn`);
+        board[cellNumber] = 'x';
         currentMarker = 'x';
         movesCount++;
-        displayBoard();
+        renderContainer.renderBoard();
         checkForWinOrTie();
       } else if (currentMarker === 'x') {
-        board[row][col] = 'o';
+        renderTextBox.changeText(`Player 1's turn`);
+        board[cellNumber] = 'o';
         currentMarker = 'o';
         movesCount++;
-        displayBoard();
+        renderContainer.renderBoard();
         checkForWinOrTie();
-      }
-    } 
-    else {
-      console.log('Choose a different number, this cell is already filled');
+      };
     }
   };
 
   const checkForWinOrTie = () => {
     if (winningComboFound) {
       return
-    }
+    };
     winningCombos.forEach((combo) => {
       const [a, b, c] = combo;
-      const marker = board[Math.floor(a / 3)][a % 3];
+      const marker = board[a];
 
-      if (marker && marker === board[Math.floor(b / 3)][b % 3] && marker === board[Math.floor(c / 3)][c % 3]){
-        console.log(`${marker} wins!`)
+      if (marker && marker === board[b] && marker === board[c]){
+        renderTextBox.changeText(`${marker === 'x' ? 'Player 1' : 'Player 2'} wins!`);
         winningComboFound = true;
-      }
+      };
     });
 
     if (!winningComboFound && movesCount === 9) {
-      console.log(`It's a tie!`)
-    }
+      renderTextBox.changeText(`It's a tie!`)
+    };
   };
 
-  displayBoard();
+  const renderContainer = (() => {
+    const container = document.createElement('div');
+    container.classList.add('board-container');
+    document.body.appendChild(container);
 
-  const renderBoard = () => {
-    const boardContainer = document.createElement('div');
-    boardContainer.classList.add('board-container');
-    document.body.appendChild(boardContainer);
-
-    board.forEach((row) => {
-      row.forEach((cell, index) => {
+    const renderBoard = () => {
+      container.innerHTML = '';
+      board.forEach((cell, index) => {
         const cellDiv = document.createElement('div');
         cellDiv.classList.add('created-cell');
-        cellDiv.innerText = cell
-        boardContainer.appendChild(cellDiv)
+        cellDiv.innerText = cell;
+        container.appendChild(cellDiv);
+  
+        cellDiv.addEventListener('click', () => {
+          placeMarker(index);
+        });
       });
-    });
-  };
+    };
 
-  renderBoard();
+    return {
+      renderBoard
+    };
+  })();
+  renderContainer.renderBoard();
 
-  return {
-    placeMarker,
-  };
+  const renderTextBox = (() => {
+    const textBox = document.createElement('h1');
+    textBox.classList.add('text-box');
+    textBox.innerText = `Player 1's turn`;
+    document.body.appendChild(textBox);
+
+    const changeText = (text) => {
+      textBox.innerText = text;
+    };
+
+    return {
+      changeText
+    };
+  })();
 
 })();
-
-const winningCombos = [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6],
-]
 
 
