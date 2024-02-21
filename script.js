@@ -19,7 +19,6 @@ const gameBoard = (() => {
 
   const placeMarker = (cellNumber) => {
     if (winningComboFound || movesCount === 9) {
-      renderTextBox.changeText('Game is already over.');
       return;
     };
 
